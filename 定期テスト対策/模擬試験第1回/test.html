@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>模擬試験 第1回 ― 基礎編（自動採点）</title>
+<style>
+body{font-family:'Hiragino Kaku Gothic Pro','Yu Gothic',Meiryo,sans-serif;background:#f4f7fb;margin:0;padding:20px;color:#222;line-height:1.7;}
+.page{max-width:920px;margin:auto;background:white;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);padding:40px;}
+.header{background:linear-gradient(135deg,#455a64,#263238);color:white;border-radius:8px;padding:24px 30px;margin-bottom:24px;}
+.header h1{margin:0;font-size:0.95em;opacity:0.85;letter-spacing:2px;}
+.header h2{margin:8px 0 0;font-size:1.6em;}
+.meta{background:#eceff1;border-left:5px solid #00acc1;padding:12px 18px;margin-bottom:24px;border-radius:4px;font-size:0.92em;}
+.q{background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:18px 22px;margin-bottom:16px;position:relative;}
+.q.correct{border-color:#43a047;background:#e8f5e9;}
+.q.wrong{border-color:#e53935;background:#ffebee;}
+.q-head{font-weight:bold;color:#263238;margin-bottom:8px;display:flex;align-items:center;}
+.q-tag{display:inline-block;background:#455a64;color:white;font-size:0.78em;padding:2px 10px;border-radius:10px;margin-right:8px;}
+.q-mark{margin-left:auto;font-size:1.4em;font-weight:bold;}
+.q-body{margin-bottom:10px;}
+.opt{display:block;margin:4px 0;padding:4px 8px;border-radius:4px;cursor:pointer;}
+.opt:hover{background:#eee;}
+.opt input{margin-right:8px;}
+input[type="text"]{padding:6px 10px;border:1px solid #999;border-radius:4px;font-size:1em;width:280px;font-family:inherit;}
+.review{margin-top:12px;padding:12px 16px;background:#fff;border-radius:6px;border-left:4px solid #00acc1;display:none;font-size:0.93em;}
+.review.show{display:block;}
+.review h4{margin:6px 0 4px;color:#00acc1;font-size:0.95em;}
+.review .label{display:inline-block;background:#00acc1;color:white;padding:1px 8px;border-radius:8px;font-size:0.78em;margin-right:6px;}
+.controls{position:sticky;bottom:20px;background:white;padding:16px;border-radius:8px;box-shadow:0 -2px 12px rgba(0,0,0,0.08);text-align:center;margin-top:20px;border:1px solid #ddd;}
+.controls button{font-size:1em;padding:10px 26px;margin:0 8px;border:none;border-radius:6px;cursor:pointer;color:white;font-weight:bold;font-family:inherit;}
+.btn-grade{background:#43a047;}
+.btn-grade:hover{background:#2e7d32;}
+.btn-reset{background:#fb8c00;}
+.btn-reset:hover{background:#e65100;}
+.btn-review{background:#1976d2;display:none;}
+.btn-review:hover{background:#0d47a1;}
+.score-panel{display:none;background:linear-gradient(135deg,#1976d2,#0d47a1);color:white;border-radius:8px;padding:24px 30px;margin:20px 0;text-align:center;}
+.score-panel.show{display:block;}
+.score-panel .score{font-size:3em;font-weight:bold;margin:10px 0;}
+.score-panel .comment{font-size:1.1em;}
+.nav{margin-top:24px;text-align:center;font-size:0.9em;}
+.nav a{color:#455a64;margin:0 12px;}
+@media print { .controls{display:none;} .review{display:block;} }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="header"><h1>インターネットセキュリティ 模擬試験 ― 自動採点版</h1><h2>第1回 ― 基礎編（全20問）</h2></div>
+<div class="meta">📘 出題範囲：第1〜3回（情報化社会・セキュリティリスク・情報セキュリティの基礎）<br>
+🕒 制限時間：45分　/　💯 配点：各5点（合計100点）<br>
+🖱️ 回答を入力後、ページ下部の <b>「採点する」</b> ボタンを押すと自動採点と解説表示が行われます。</div>
+
+<div id="score-panel" class="score-panel">
+  <div>あなたのスコア</div>
+  <div class="score"><span id="score">0</span> / 100 点</div>
+  <div>正答数：<span id="correct-count">0</span> / 20問</div>
+  <div class="comment" id="comment"></div>
+</div>
+
+<div id="quiz"></div>
+
+<div class="controls">
+  <button class="btn-grade" onclick="grade()">🎯 採点する</button>
+  <button class="btn-review btn-review" id="btn-review" onclick="toggleReview()">📖 振り返り表示/非表示</button>
+  <button class="btn-reset" onclick="reset()">🔄 リセット</button>
+</div>
+
+<div class="nav"><a href="../00_全体マップ.html">▶ 全体マップへ戻る</a></div>
+</div>
+
+<script>
+const REF = {
+  bc:{url:'../01_情報セキュリティの基礎.html#concepts', label:'📘 資料①「情報セキュリティの基本概念」へ'},
+  bt:{url:'../01_情報セキュリティの基礎.html#terms', label:'📘 資料①「キーワード辞典」へ'},
+  br:{url:'../01_情報セキュリティの基礎.html#relations', label:'📘 資料①「関係図・比較」へ'},
+  bk:{url:'../01_情報セキュリティの基礎.html#checkpoint', label:'📘 資料①「確認ポイント」へ'},
+  tc:{url:'../02_脅威とマルウェア.html#concepts', label:'📕 資料②「脅威の分類と詳細」へ'},
+  tt:{url:'../02_脅威とマルウェア.html#terms', label:'📕 資料②「キーワード辞典」へ'},
+  tr:{url:'../02_脅威とマルウェア.html#relations', label:'📕 資料②「関係図・比較」へ'},
+};
+// 各問題IDと資料セクションのマッピング
+const refMap = {
+  1:'bc', 2:'bc', 3:'bk', 4:'bc', 5:'tc', 6:'tc', 7:'tt', 8:'bt', 9:'tc', 10:'bt',
+  11:'bc', 12:'bc', 13:'bt', 14:'br', 15:'bt', 16:'tr', 17:'bt', 18:'br', 19:'tc', 20:'bc'
+};
+const questions = [
+  {
+    id:1, type:'text', tag:'穴埋め',
+    text:'情報セキュリティの三大要素は「機密性 (Confidentiality)」「（　？　）」「可用性 (Availability)」である。空欄に当てはまる語句を答えなさい。',
+    answer:['完全性','integrity','Integrity','INTEGRITY','完全性（Integrity）','完全性(Integrity)'],
+    intent:'CIA の中で「機密性」「可用性」が示されているとき、残りを即答できるかを確認する基礎問題。',
+    explanation:'CIA = Confidentiality / Integrity / Availability。Integrity（完全性）は「改ざん・破壊から守る」性質。'
+  },
+  {
+    id:2, type:'radio', tag:'四択',
+    text:'情報資産のうち「有形資産」に該当するものはどれか。',
+    options:['A. OSやアプリケーション','B. 顧客情報のデータ','C. サーバやパソコン等のハードウェア','D. 売上情報のデータベース'],
+    answer:'C',
+    intent:'有形/無形の区別を理解しているか。データやソフトは無形。',
+    explanation:'有形資産＝物理的に形がある資産（PC・サーバ・記録媒体・文書）。データやソフトウェアは無形資産。'
+  },
+  {
+    id:3, type:'radio', tag:'○×',
+    text:'「自分だけは大丈夫」という意識は、セキュリティ被害が後を絶たない理由の一つである。',
+    options:['○（正しい）','×（誤り）'],
+    answer:'○（正しい）',
+    intent:'非技術的要因（人の意識）が脅威に直結することを理解しているか。',
+    explanation:'講義で明示。情報資産を守るという意識が浸透していない＋「自分だけは大丈夫」が代表的な要因。'
+  },
+  {
+    id:4, type:'radio', tag:'選択記述',
+    text:'次の説明に該当するセキュリティの要素はどれか。<br>「情報を不適切な対象に見せないこと」',
+    options:['A. 可用性 (Availability)','B. 完全性 (Integrity)','C. 機密性 (Confidentiality)','D. 真正性 (Authenticity)'],
+    answer:'C',
+    intent:'定義文と用語のマッチング。CIA の中での識別。',
+    explanation:'「見せない」＝機密性。脅威例はネットワーク盗聴・不正コピー。'
+  },
+  {
+    id:5, type:'radio', tag:'四択',
+    text:'DoS攻撃の説明として最も適切なものはどれか。',
+    options:['A. パスワード辞書を用いて認証を破る攻撃','B. サーバに大量のデータを送り機能停止に追い込む攻撃','C. 偽サイトへ誘導して認証情報を盗む攻撃','D. ファイルを暗号化して身代金を要求する攻撃'],
+    answer:'B',
+    intent:'Denial of Service の本質（負荷集中）を理解。',
+    explanation:'A=辞書攻撃、C=フィッシング、D=ランサムウェア。'
+  },
+  {
+    id:6, type:'text', tag:'穴埋め',
+    text:'悪意のあるプログラムを総称して（　？　）と呼ぶ。',
+    answer:['マルウェア','malware','Malware'],
+    intent:'malicious software の総称を答えられるか。',
+    explanation:'ウイルス・ワーム・トロイの木馬・スパイウェア・ボット等を含む。'
+  },
+  {
+    id:7, type:'radio', tag:'四択',
+    text:'マルウェアの種類とその特徴の組み合わせとして「誤っている」ものはどれか。',
+    options:['A. コンピュータウイルス ― 寄生し、増殖機能あり','B. ワーム ― 独立、増殖能力が高い','C. トロイの木馬 ― 独立、増殖能力なし','D. スパイウェア ― 自己増殖して他PCに拡散する'],
+    answer:'D',
+    intent:'各マルウェアの「増殖能力」と「形態」の判別。',
+    explanation:'スパイウェアは情報収集が主機能で、自己増殖は定義の中心ではない。'
+  },
+  {
+    id:8, type:'radio', tag:'○×',
+    text:'「リスク」とは情報資産が実際に損なわれた事態を指し、「インシデント」とは脅威に晒される可能性を指す。',
+    options:['○（正しい）','×（誤り）'],
+    answer:'×（誤り）',
+    intent:'リスクとインシデントの定義の順序が逆になっていることに気付けるか。',
+    explanation:'正しくは リスク＝可能性、インシデント＝顕在化した事態。'
+  },
+  {
+    id:9, type:'radio', tag:'用語選択',
+    text:'情報システムのセキュリティ上の弱点を指す用語として最も適切なものはどれか。',
+    options:['A. インシデント','B. 脆弱性（セキュリティホール）','C. リスク','D. ばらまき型メール'],
+    answer:'B',
+    intent:'「弱点」の用語を選べるか。',
+    explanation:'OSの欠陥や SSL/TLS の不具合（Heartbleed等）が代表例。'
+  },
+  {
+    id:10, type:'checkbox', tag:'複数選択',
+    text:'有形資産の例として該当するものを<strong>すべて</strong>選びなさい。',
+    options:['A. 印刷された文書','B. OSなどのソフトウェア','C. CDやDVDの記録媒体','D. 顧客情報のデータ','E. サーバ・パソコン'],
+    answer:['A','C','E'],
+    intent:'有形と無形を確実に区別できるか。',
+    explanation:'ソフトウェアとデータは無形。残りは物理的な形を持つ有形資産。'
+  },
+  {
+    id:11, type:'text', tag:'穴埋め',
+    text:'ISO27002 では情報セキュリティは、情報の「機密性・完全性・（　？　）」を維持することと定義されている。',
+    answer:['可用性','availability','Availability'],
+    intent:'CIA の最後の要素を答えられるか。',
+    explanation:'Availability（可用性）＝必要なときに使える状態を維持する性質。'
+  },
+  {
+    id:12, type:'radio', tag:'四択',
+    text:'情報の重要度ランク付けにおいて、「公開情報（C）」に該当するものはどれか。',
+    options:['A. 製品原価表','B. 営業所売上高','C. 公開ウェブページ','D. 顧客情報'],
+    answer:'C',
+    intent:'A機密／B社外秘／C公開 の3ランクを区別できるか。',
+    explanation:'A=機密情報、B=社外秘情報、C=公開情報。公開ウェブページは誰でも見られる情報。'
+  },
+  {
+    id:13, type:'radio', tag:'○×',
+    text:'「情報漏洩」とは、本来利用を許可していない人に情報が伝わってしまうことである。',
+    options:['○（正しい）','×（誤り）'],
+    answer:'○（正しい）',
+    intent:'情報漏洩の定義の確認。',
+    explanation:'例：ベネッセ事件（お詫び費用 200億円・対策費用 約60億円）。'
+  },
+  {
+    id:14, type:'radio', tag:'用語選択',
+    text:'「正規のユーザのように装い、情報を収集すること」を指す不正行為はどれか。',
+    options:['A. 盗聴','B. 改ざん','C. なりすまし','D. サービス妨害'],
+    answer:'C',
+    intent:'不正行為の種類を識別できるか。',
+    explanation:'なりすまし＝他人になりすましリソース・サービスを不正利用。管理者のID/パスワード盗用が典型例。'
+  },
+  {
+    id:15, type:'text', tag:'穴埋め',
+    text:'ベネッセ事件における<strong>お詫び費用</strong>は約（　？　）億円であった。',
+    answer:['200','２００'],
+    intent:'代表的事件の被害規模を覚えているか。',
+    explanation:'お詫び費用 200億円、各種対策費用 約60億円。事件名と数字をセットで覚える。'
+  },
+  {
+    id:16, type:'radio', tag:'○×',
+    text:'コンピュータウイルスは、宿主のプログラムを必要とせず、独立して活動・増殖するプログラムである。',
+    options:['○（正しい）','×（誤り）'],
+    answer:'×（誤り）',
+    intent:'ウイルスとワームの違いを把握しているか。',
+    explanation:'独立して活動・増殖するのは<strong>ワーム</strong>。ウイルスは宿主に寄生して増殖する。'
+  },
+  {
+    id:17, type:'radio', tag:'四択',
+    text:'OWASP Top10（2021年版）で第1位の項目はどれか。',
+    options:['A. インジェクション','B. アクセス制御の不備','C. 暗号化の失敗','D. セキュリティの設定ミス'],
+    answer:'B',
+    intent:'OWASP Top10 の現在の傾向を把握しているか。',
+    explanation:'1位＝アクセス制御の不備、2位＝暗号化の失敗、3位＝インジェクション（順位変動に注意）。'
+  },
+  {
+    id:18, type:'radio', tag:'四択',
+    text:'JNNS 2018 調査による「個人情報漏洩の原因別割合」で<strong>最も多い</strong>原因はどれか。',
+    options:['A. 不正アクセス','B. ワーム・ウイルス','C. 紛失・置忘れ','D. 内部犯行'],
+    answer:'C',
+    intent:'人的ミスが漏洩原因の大半を占めることを理解しているか。',
+    explanation:'紛失・置忘れ 26.2%、誤操作 24.6%、不正アクセス 20.3%。非技術的要因が約半数。'
+  },
+  {
+    id:19, type:'text', tag:'穴埋め',
+    text:'OS のリングプロテクション構造において、最も高い権限を持つ最内側の領域は「Ring 0」と呼ばれ、（　？　）が動作する場所である。',
+    answer:['カーネル','kernel','Kernel'],
+    intent:'OS の権限階層構造を理解しているか。',
+    explanation:'Ring 0 = カーネル（最特権）／Ring 3 = アプリケーション（最低特権）。'
+  },
+  {
+    id:20, type:'radio', tag:'記述選択',
+    text:'「Availability（可用性）」の英語の意味として最も適切なものはどれか。',
+    options:['A. 改ざんされない性質','B. 秘密が守られる性質','C. いつでも利用できる性質','D. 認証が正しく行われる性質'],
+    answer:'C',
+    intent:'英語の意味から要素を判別できるか。',
+    explanation:'Available =「利用可能な」。脅威例はDoS攻撃・破壊。'
+  }
+];
+
+const quiz = document.getElementById('quiz');
+let graded = false;
+
+function renderQuiz(){
+  quiz.innerHTML = questions.map(q => {
+    let body = '';
+    if(q.type === 'radio'){
+      body = q.options.map((o,i) => `<label class="opt"><input type="radio" name="q${q.id}" value="${o.split('.')[0].trim()}"> ${o}</label>`).join('');
+    } else if(q.type === 'checkbox'){
+      body = q.options.map((o,i) => `<label class="opt"><input type="checkbox" name="q${q.id}" value="${o.split('.')[0].trim()}"> ${o}</label>`).join('');
+    } else if(q.type === 'text'){
+      body = `<input type="text" id="q${q.id}" placeholder="回答を入力">`;
+    }
+    return `<div class="q" id="qbox${q.id}">
+      <div class="q-head"><span class="q-tag">Q${q.id} ${q.tag}</span><span class="q-mark" id="mark${q.id}"></span></div>
+      <div class="q-body">${q.text}</div>
+      ${body}
+      <div class="review" id="review${q.id}">
+        <h4><span class="label">模範解答</span>${formatAnswer(q)}</h4>
+        <h4><span class="label" style="background:#5e35b1;">設問意図</span></h4><div>${q.intent}</div>
+        <h4><span class="label" style="background:#fb8c00;">解説</span></h4><div>${q.explanation}</div>
+        ${refMap[q.id] ? `<div style="margin-top:10px;"><a href="${REF[refMap[q.id]].url}" target="_blank" style="display:inline-block;background:#00acc1;color:white;padding:6px 14px;border-radius:6px;text-decoration:none;font-size:0.88em;">${REF[refMap[q.id]].label} 🔗</a></div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function formatAnswer(q){
+  if(q.type === 'text') return q.answer[0];
+  if(q.type === 'checkbox') return q.answer.join('・');
+  return q.answer;
+}
+
+function getUserAnswer(q){
+  if(q.type === 'radio'){
+    const sel = document.querySelector(`input[name="q${q.id}"]:checked`);
+    return sel ? sel.value : null;
+  }
+  if(q.type === 'checkbox'){
+    return Array.from(document.querySelectorAll(`input[name="q${q.id}"]:checked`)).map(e=>e.value).sort();
+  }
+  if(q.type === 'text'){
+    return document.getElementById(`q${q.id}`).value.trim();
+  }
+}
+
+function isCorrect(q, user){
+  if(user === null || user === '' || (Array.isArray(user) && user.length === 0)) return false;
+  if(q.type === 'text') return q.answer.some(a => user === a || user.toLowerCase() === a.toLowerCase());
+  if(q.type === 'checkbox') return JSON.stringify(user) === JSON.stringify([...q.answer].sort());
+  return user === q.answer;
+}
+
+function grade(){
+  let correct = 0;
+  questions.forEach(q => {
+    const user = getUserAnswer(q);
+    const ok = isCorrect(q, user);
+    const box = document.getElementById(`qbox${q.id}`);
+    const mark = document.getElementById(`mark${q.id}`);
+    const review = document.getElementById(`review${q.id}`);
+    box.classList.remove('correct','wrong');
+    if(ok){ box.classList.add('correct'); mark.textContent='✓'; mark.style.color='#2e7d32'; correct++; }
+    else { box.classList.add('wrong'); mark.textContent='✗'; mark.style.color='#c62828'; }
+    review.classList.add('show');
+  });
+  const score = correct * 5;
+  document.getElementById('score').textContent = score;
+  document.getElementById('correct-count').textContent = correct;
+  let comment = '';
+  if(score === 100) comment = '🏆 満点！完璧な理解です。';
+  else if(score >= 80) comment = '🎉 合格ライン突破！この調子で本試験へ。';
+  else if(score >= 60) comment = '📘 基礎は身についています。間違えた問題を復習しましょう。';
+  else comment = '📚 もう一度 解説資料 を読み直して再挑戦しましょう。';
+  document.getElementById('comment').textContent = comment;
+  document.getElementById('score-panel').classList.add('show');
+  document.getElementById('btn-review').style.display = 'inline-block';
+  graded = true;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleReview(){
+  document.querySelectorAll('.review').forEach(r => r.classList.toggle('show'));
+}
+
+function reset(){
+  if(!confirm('全ての回答をリセットしますか？')) return;
+  renderQuiz();
+  document.getElementById('score-panel').classList.remove('show');
+  document.getElementById('btn-review').style.display = 'none';
+  graded = false;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+renderQuiz();
+</script>
+</body>
+</html>

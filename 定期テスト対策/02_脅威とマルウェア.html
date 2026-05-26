@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>脅威とマルウェア ― 解説資料</title>
+<style>
+  body { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', Meiryo, sans-serif; background: #f4f7fb; margin: 0; padding: 20px; color: #222; line-height: 1.75; }
+  .page { max-width: 960px; margin: auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 40px; }
+  .header { background: linear-gradient(135deg, #455a64, #263238); color: white; border-radius: 8px; padding: 24px 30px; margin-bottom: 32px; }
+  .header h1 { margin: 0; font-size: 0.95em; opacity: 0.85; letter-spacing: 2px; }
+  .header h2 { margin: 8px 0 0; font-size: 1.7em; }
+  .header .subtitle { margin-top: 8px; opacity: 0.9; font-size: 0.95em; }
+  .toc { background: #eceff1; border-left: 5px solid #455a64; border-radius: 6px; padding: 16px 24px; margin-bottom: 32px; }
+  .toc h3 { margin: 0 0 10px; color: #455a64; }
+  .toc ol { margin: 6px 0 0 20px; }
+  .toc a { color: #263238; text-decoration: none; font-weight: 500; }
+  .section { margin-bottom: 36px; }
+  .section-title { font-size: 1.2em; font-weight: bold; color: white; background: #263238; border-radius: 6px; padding: 10px 18px; margin-bottom: 16px; }
+  .section-subtitle { font-size: 1.05em; font-weight: bold; color: #455a64; border-bottom: 2px solid #455a64; padding-bottom: 4px; margin: 20px 0 12px; }
+  .overview-box { background: linear-gradient(180deg, #eceff1 0%, white 100%); border: 1px solid #455a64; border-radius: 10px; padding: 24px; text-align: center; }
+  .concept-box { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 18px 22px; margin-bottom: 14px; }
+  .concept-box h4 { margin: 0 0 8px; color: #263238; font-size: 1.1em; }
+  .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .term-card { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 14px 18px; }
+  .term-card .term-name { font-weight: bold; color: #00acc1; font-size: 1.05em; margin-bottom: 6px; }
+  .term-card .term-def { color: #333; font-size: 0.95em; line-height: 1.7; }
+  .term-card .term-example { background: #fffde7; border-left: 3px solid #fdd835; padding: 6px 10px; margin-top: 8px; font-size: 0.88em; color: #555; }
+  table.compare { border-collapse: collapse; width: 100%; margin: 12px 0; }
+  table.compare th, table.compare td { border: 1px solid #bdbdbd; padding: 10px 14px; text-align: left; vertical-align: top; }
+  table.compare th { background: #455a64; color: white; }
+  table.compare tr:nth-child(even) td { background: #fafafa; }
+  .checkpoint { background: #e8f5e9; border-left: 5px solid #43a047; border-radius: 6px; padding: 14px 20px;}
+  .checkpoint h4 { margin: 0 0 8px; color: #2e7d32; }
+  .note { background: #fff3e0; border-left: 4px solid #fb8c00; border-radius: 4px; padding: 10px 16px; margin: 10px 0; font-size: 0.92em; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <h1>情報・IT・セキュリティ</h1>
+    <h2>② 脅威とマルウェア</h2>
+    <div class="subtitle">マルウェアの分類・不正アクセスの4段階・サービス妨害攻撃を体系的に理解する</div>
+  </div>
+
+  <div class="toc">
+    <h3>📑 目次</h3>
+    <ol>
+      <li><a href="#overview">全体像マップ</a></li>
+      <li><a href="#concepts">脅威の分類と詳細</a></li>
+      <li><a href="#terms">キーワード辞典</a></li>
+      <li><a href="#relations">関係図・比較</a></li>
+      <li><a href="#checkpoint">確認ポイント</a></li>
+    </ol>
+  </div>
+
+  <div class="section" id="overview">
+    <div class="section-title">🗺️ 1. 全体像マップ</div>
+    <div class="overview-box">
+      <svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg">
+        <rect x="300" y="20" width="200" height="60" rx="10" fill="#263238"/>
+        <text x="400" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">脅威の分類</text>
+        <!-- 外部 -->
+        <line x1="400" y1="80" x2="180" y2="140" stroke="#90a4ae" stroke-width="2"/>
+        <line x1="400" y1="80" x2="620" y2="140" stroke="#90a4ae" stroke-width="2"/>
+        <rect x="80" y="140" width="200" height="50" rx="8" fill="#e53935"/>
+        <text x="180" y="170" text-anchor="middle" fill="white" font-weight="bold" font-size="15">外部のリスク要因</text>
+        <rect x="520" y="140" width="200" height="50" rx="8" fill="#1976d2"/>
+        <text x="620" y="170" text-anchor="middle" fill="white" font-weight="bold" font-size="15">内部のリスク要因</text>
+        <!-- 子 -->
+        <line x1="180" y1="190" x2="100" y2="240" stroke="#90a4ae" stroke-width="2"/>
+        <line x1="180" y1="190" x2="180" y2="240" stroke="#90a4ae" stroke-width="2"/>
+        <line x1="180" y1="190" x2="260" y2="240" stroke="#90a4ae" stroke-width="2"/>
+        <rect x="40" y="240" width="120" height="40" rx="6" fill="#fb8c00"/>
+        <text x="100" y="265" text-anchor="middle" fill="white" font-size="13">マルウェア</text>
+        <rect x="170" y="240" width="120" height="40" rx="6" fill="#fb8c00"/>
+        <text x="230" y="265" text-anchor="middle" fill="white" font-size="13">不正アクセス</text>
+        <rect x="220" y="295" width="160" height="40" rx="6" fill="#fb8c00"/>
+        <text x="300" y="320" text-anchor="middle" fill="white" font-size="13">DoS/DDoS攻撃</text>
+
+        <line x1="620" y1="190" x2="560" y2="240" stroke="#90a4ae" stroke-width="2"/>
+        <line x1="620" y1="190" x2="700" y2="240" stroke="#90a4ae" stroke-width="2"/>
+        <rect x="490" y="240" width="140" height="40" rx="6" fill="#7e57c2"/>
+        <text x="560" y="265" text-anchor="middle" fill="white" font-size="13">システム脆弱性</text>
+        <rect x="640" y="240" width="140" height="40" rx="6" fill="#7e57c2"/>
+        <text x="710" y="265" text-anchor="middle" fill="white" font-size="13">組織的脆弱性</text>
+
+        <text x="400" y="395" text-anchor="middle" fill="#555" font-size="13">▼ どちらも「情報資産」を損なう要因となる</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section" id="concepts">
+    <div class="section-title">📘 2. 脅威の分類と詳細</div>
+
+    <div class="section-subtitle">2-1. 外部のリスク要因①：マルウェア</div>
+    <div class="concept-box">
+      <h4>マルウェアとは</h4>
+      <p><strong>悪意のあるプログラムの総称</strong>。感染すると情報漏洩、データ破壊、PC使用不能などが起こる。<br>感染の兆候：処理が急に重くなる／突然シャットダウンされる／金銭を要求する脅迫ポップアップが出る。</p>
+    </div>
+    <div class="concept-box">
+      <h4>主要な感染経路</h4>
+      <p>添付ファイル付きメール → ファイル開封でダウンローダが起動 → マルウェア本体をダウンロード → 感染 → 情報窃取。<br>近年は<strong>Emotet</strong>（メール経由で感染拡大、メアド・パスワード窃取）、<strong>WannaCry</strong>（ランサムウェア、ファイル暗号化＋身代金要求）が代表例。</p>
+    </div>
+
+    <div class="section-subtitle">2-2. 外部のリスク要因②：不正アクセスの4段階</div>
+    <div class="concept-box">
+      <h4>事前調査 → 権利取得 → 不正実行 → 後処理</h4>
+      <p>① <strong>事前調査</strong>：ポートスキャン（nmap等）でサーバの状態を調べる<br>
+      ② <strong>権利取得</strong>：パスワードクラッキング（辞書攻撃など）でアカウント奪取<br>
+      ③ <strong>不正実行</strong>：盗聴・なりすまし・改ざんを実施<br>
+      ④ <strong>後処理</strong>：ログファイルを消去・改ざんして痕跡を消す</p>
+    </div>
+    <div class="note">💡 標的型攻撃に対応した <strong>サイバーキルチェーン</strong>（7段階）：偵察 → 武器化 → デリバリー → エクスプロイト → 侵入 → 潜伏活動 → 目的の実行。</div>
+
+    <div class="section-subtitle">2-3. 外部のリスク要因③：サーバへの攻撃</div>
+    <div class="concept-box">
+      <h4>DoS攻撃 / DDoS攻撃</h4>
+      <p><strong>DoS（Denial of Service）攻撃</strong>＝サーバに大量のデータを送って過大な負荷をかけ、機能停止に追い込む攻撃。<br>
+      <strong>DDoS（分散型DoS）攻撃</strong>＝ボットに感染させた多数のPCから一斉に攻撃を仕掛ける。攻撃元が分散しているため防御が困難。</p>
+    </div>
+
+    <div class="section-subtitle">2-4. 内部のリスク要因</div>
+    <div class="concept-box">
+      <h4>① 情報システムの脆弱性</h4>
+      <p>セキュリティ上の弱点（=<strong>セキュリティホール</strong>）。例：OSのリングプロテクション構造の欠陥、SSL/TLSライブラリの脆弱性（Heartbleed）。OWASP Top10で公表される。</p>
+    </div>
+    <div class="concept-box">
+      <h4>② 組織に内在する脆弱性</h4>
+      <p>盗難・紛失、誤送信、内部犯行 など。<br>例：私物の記憶媒体に顧客情報をコピー→盗難で流出／報道資料と誤って個人情報ファイルを公開／業務委託先従業員による情報持出。</p>
+    </div>
+  </div>
+
+  <div class="section" id="terms">
+    <div class="section-title">📖 3. キーワード辞典（マルウェアの種類）</div>
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-name">コンピュータウイルス</div>
+        <div class="term-def">宿主のプログラムを一部書き換えて感染。<strong>増殖機能あり・寄生型</strong>。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">ワーム</div>
+        <div class="term-def">独立したプログラムで、<strong>自己増殖能力が高い・単独で活動</strong>。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">トロイの木馬</div>
+        <div class="term-def">独立したプログラム。<strong>増殖能力なし・偽装して活動</strong>。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">エクスプロイト</div>
+        <div class="term-def">コンピュータの脆弱性を利用して攻撃するプログラム。増殖能力なし。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">スパイウェア</div>
+        <div class="term-def">個人情報やアクセス履歴などの情報を収集するプログラム。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">ボット</div>
+        <div class="term-def">遠隔操作によるコンピュータの悪用を目的としたプログラム。DDoS攻撃の踏み台になる。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">ランサムウェア</div>
+        <div class="term-def">PC内のデータを暗号化し、身代金（ransom）を要求するマルウェア。</div>
+        <div class="term-example">例：WannaCry（2017年世界的被害）</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Emotet</div>
+        <div class="term-def">主にメール経由で感染を広げるマルウェア。メアドやパスワードを窃取し、他のマルウェアにも感染させる。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">ポートスキャン</div>
+        <div class="term-def">攻撃前の事前調査として、開いているポートを調べる行為。nmapが代表ツール。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">辞書攻撃</div>
+        <div class="term-def">辞書ファイルに登録された単語を順に試して、パスワードを破る攻撃。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="relations">
+    <div class="section-title">🔗 4. 関係図・比較</div>
+
+    <div class="section-subtitle">マルウェア3大分類の対比（増殖能力 × 寄生/単独）</div>
+    <table class="compare">
+      <tr><th>種類</th><th>増殖能力</th><th>形態</th><th>特徴</th></tr>
+      <tr><td>コンピュータウイルス</td><td>あり</td><td>寄生（宿主が必要）</td><td>宿主プログラムを書き換えて感染</td></tr>
+      <tr><td>ワーム</td><td>あり（高い）</td><td>単独</td><td>独立して活動・増殖</td></tr>
+      <tr><td>トロイの木馬</td><td>なし</td><td>単独</td><td>偽装して潜伏</td></tr>
+      <tr><td>エクスプロイト</td><td>なし</td><td>―</td><td>脆弱性を利用</td></tr>
+    </table>
+
+    <div class="section-subtitle">不正アクセスの4段階（フロー図）</div>
+    <div class="overview-box">
+      <svg viewBox="0 0 800 140" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#455a64"/>
+          </marker>
+        </defs>
+        <rect x="20" y="40" width="160" height="60" rx="8" fill="#00acc1"/>
+        <text x="100" y="68" text-anchor="middle" fill="white" font-weight="bold" font-size="14">① 事前調査</text>
+        <text x="100" y="88" text-anchor="middle" fill="white" font-size="11">ポートスキャン</text>
+        <line x1="180" y1="70" x2="220" y2="70" stroke="#455a64" stroke-width="2" marker-end="url(#arr2)"/>
+        <rect x="220" y="40" width="160" height="60" rx="8" fill="#43a047"/>
+        <text x="300" y="68" text-anchor="middle" fill="white" font-weight="bold" font-size="14">② 権利取得</text>
+        <text x="300" y="88" text-anchor="middle" fill="white" font-size="11">パスワードクラック</text>
+        <line x1="380" y1="70" x2="420" y2="70" stroke="#455a64" stroke-width="2" marker-end="url(#arr2)"/>
+        <rect x="420" y="40" width="160" height="60" rx="8" fill="#fb8c00"/>
+        <text x="500" y="68" text-anchor="middle" fill="white" font-weight="bold" font-size="14">③ 不正実行</text>
+        <text x="500" y="88" text-anchor="middle" fill="white" font-size="11">盗聴・改ざん</text>
+        <line x1="580" y1="70" x2="620" y2="70" stroke="#455a64" stroke-width="2" marker-end="url(#arr2)"/>
+        <rect x="620" y="40" width="160" height="60" rx="8" fill="#e53935"/>
+        <text x="700" y="68" text-anchor="middle" fill="white" font-weight="bold" font-size="14">④ 後処理</text>
+        <text x="700" y="88" text-anchor="middle" fill="white" font-size="11">ログの消去</text>
+      </svg>
+    </div>
+
+    <div class="section-subtitle">マルウェア感染時の対処手順</div>
+    <table class="compare">
+      <tr><th>手順</th><th>内容</th></tr>
+      <tr><td>1</td><td>ネットワーク接続を切断し、システム管理者の指示を仰ぐ（本学ではノートPCサポート室）</td></tr>
+      <tr><td>2</td><td>最新のウイルス対策ソフトで検査し、ウイルスを特定</td></tr>
+      <tr><td>3</td><td>ウイルスにあった適切な駆除を行う</td></tr>
+      <tr><td>4</td><td>データが破壊されたときはバックアップから復旧</td></tr>
+      <tr><td>5</td><td>最新のウイルス対策ソフトでもう一度検査</td></tr>
+      <tr><td>6</td><td>再発防止策を講じる</td></tr>
+    </table>
+    <div class="note">⚠ 最も安全で確実な駆除方法は <strong>システムの初期化とOS・アプリケーションの再インストール</strong>。</div>
+  </div>
+
+  <div class="section" id="checkpoint">
+    <div class="section-title">✅ 5. 確認ポイント</div>
+    <div class="checkpoint">
+      <h4>必ず押さえる要点</h4>
+      <ul>
+        <li><strong>マルウェア3大分類の対比</strong> ― ウイルス（寄生・増殖）／ワーム（単独・増殖）／トロイの木馬（単独・非増殖）</li>
+        <li><strong>不正アクセスの4段階</strong> ― 事前調査 → 権利取得 → 不正実行 → 後処理</li>
+        <li><strong>サイバーキルチェーン7段階</strong> ― 偵察・武器化・デリバリー・エクスプロイト・侵入・潜伏・目的の実行</li>
+        <li><strong>DoS vs DDoS</strong> ― 単独 vs 分散（ボットネット利用）</li>
+        <li><strong>有名なマルウェアの例</strong> ― Emotet（メール経由・情報窃取）／WannaCry（ランサムウェア）</li>
+        <li><strong>感染時の最終手段</strong> ― 初期化とOS・アプリの再インストール</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>インターネットセキュリティ ― 全体マップ</title>
+<style>
+  body { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', Meiryo, sans-serif; background: #f4f7fb; margin: 0; padding: 20px; color: #222; line-height: 1.75; }
+  .page { max-width: 960px; margin: auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 40px; }
+  .header { background: linear-gradient(135deg, #455a64, #263238); color: white; border-radius: 8px; padding: 24px 30px; margin-bottom: 32px; }
+  .header h1 { margin: 0; font-size: 0.95em; opacity: 0.85; letter-spacing: 2px; }
+  .header h2 { margin: 8px 0 0; font-size: 1.8em; }
+  .header .subtitle { margin-top: 8px; opacity: 0.9; font-size: 1em; }
+  .section { margin-bottom: 36px; }
+  .section-title { font-size: 1.2em; font-weight: bold; color: white; background: #263238; border-radius: 6px; padding: 10px 18px; margin-bottom: 16px; }
+  .overview-box { background: linear-gradient(180deg, #eceff1 0%, white 100%); border: 1px solid #455a64; border-radius: 10px; padding: 24px; text-align: center; }
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 20px;}
+  .toc-card { background: #eceff1; border-left: 5px solid #00acc1; border-radius: 6px; padding: 16px 20px; text-decoration: none; color: #222; transition: transform 0.15s; }
+  .toc-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1);}
+  .toc-card h4 { margin: 0 0 6px; color: #263238; font-size: 1.05em;}
+  .toc-card p { margin: 0; font-size: 0.88em; color: #555;}
+  table.compare { border-collapse: collapse; width: 100%; margin: 12px 0; }
+  table.compare th, table.compare td { border: 1px solid #bdbdbd; padding: 10px 14px; text-align: left; vertical-align: top; font-size: 0.95em;}
+  table.compare th { background: #455a64; color: white; }
+  table.compare tr:nth-child(even) td { background: #fafafa; }
+  .checkpoint { background: #e8f5e9; border-left: 5px solid #43a047; border-radius: 6px; padding: 14px 20px;}
+  .checkpoint h4 { margin: 0 0 8px; color: #2e7d32;}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <h1>インターネットセキュリティ・全15回</h1>
+    <h2>定期テスト対策 ― 全体マップ</h2>
+    <div class="subtitle">情報セキュリティの「3要素」を軸に、脅威 → 対策 → 組織管理を体系的に把握する</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🗺️ 全体像 ― 単元の階層構造</div>
+    <div class="overview-box">
+      <svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#455a64"/>
+          </marker>
+        </defs>
+        <!-- 中心 -->
+        <rect x="340" y="200" width="220" height="80" rx="12" fill="#263238"/>
+        <text x="450" y="235" text-anchor="middle" fill="white" font-weight="bold" font-size="18">情報セキュリティ</text>
+        <text x="450" y="260" text-anchor="middle" fill="#bbb" font-size="13">機密性・完全性・可用性 (CIA)</text>
+
+        <!-- 4つの枝 -->
+        <rect x="40" y="40" width="200" height="70" rx="10" fill="#00acc1"/>
+        <text x="140" y="72" text-anchor="middle" fill="white" font-weight="bold" font-size="15">① 基礎概念</text>
+        <text x="140" y="93" text-anchor="middle" fill="white" font-size="12">情報資産・CIA・リスク</text>
+
+        <rect x="660" y="40" width="200" height="70" rx="10" fill="#e53935"/>
+        <text x="760" y="72" text-anchor="middle" fill="white" font-weight="bold" font-size="15">② 脅威・マルウェア</text>
+        <text x="760" y="93" text-anchor="middle" fill="white" font-size="12">ウイルス・不正アクセス</text>
+
+        <rect x="40" y="370" width="200" height="70" rx="10" fill="#fb8c00"/>
+        <text x="140" y="402" text-anchor="middle" fill="white" font-weight="bold" font-size="15">③ 攻撃手法と対策</text>
+        <text x="140" y="423" text-anchor="middle" fill="white" font-size="12">標的型・フィッシング</text>
+
+        <rect x="660" y="370" width="200" height="70" rx="10" fill="#43a047"/>
+        <text x="760" y="402" text-anchor="middle" fill="white" font-weight="bold" font-size="15">④ 組織のセキュリティ</text>
+        <text x="760" y="423" text-anchor="middle" fill="white" font-size="12">リスク管理・ポリシー</text>
+
+        <!-- 接続線 -->
+        <line x1="240" y1="80" x2="340" y2="210" stroke="#455a64" stroke-width="2" marker-end="url(#arr)"/>
+        <line x1="660" y1="80" x2="560" y2="210" stroke="#455a64" stroke-width="2" marker-end="url(#arr)"/>
+        <line x1="240" y1="400" x2="340" y2="270" stroke="#455a64" stroke-width="2" marker-end="url(#arr)"/>
+        <line x1="660" y1="400" x2="560" y2="270" stroke="#455a64" stroke-width="2" marker-end="url(#arr)"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📑 単元別資料</div>
+    <div class="toc-grid">
+      <a class="toc-card" href="01_情報セキュリティの基礎.html">
+        <h4>① 情報セキュリティの基礎</h4>
+        <p>情報資産・CIA・リスクとインシデント・脆弱性（第1〜3回）</p>
+      </a>
+      <a class="toc-card" href="02_脅威とマルウェア.html">
+        <h4>② 脅威とマルウェア</h4>
+        <p>マルウェアの種類・不正アクセスの4段階・DoS/DDoS（第3〜4回）</p>
+      </a>
+      <a class="toc-card" href="03_攻撃手法と対策.html">
+        <h4>③ 攻撃手法と対策</h4>
+        <p>標的型攻撃・フィッシング・スマホ・無線LAN（第4〜5回）</p>
+      </a>
+      <a class="toc-card" href="04_組織のセキュリティ管理.html">
+        <h4>④ 組織のセキュリティ管理</h4>
+        <p>リスクマネジメント・BCP・ポリシー・物理セキュリティ（第6〜7回）</p>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📝 模擬試験（全3回・各20問・自動採点＋振り返り機能付き）</div>
+    <div class="toc-grid">
+      <a class="toc-card" href="模擬試験第1回/test.html" style="border-left-color:#00acc1;">
+        <h4>🚀 第1回 ― 基礎編（20問）</h4>
+        <p>第1〜3回範囲（CIA・情報資産・マルウェア基礎）<br><small>自動採点・正誤判定・解説表示</small></p>
+      </a>
+      <a class="toc-card" href="模擬試験第2回/test.html" style="border-left-color:#fb8c00;">
+        <h4>⚡ 第2回 ― 応用編（20問）</h4>
+        <p>第3〜5回範囲（標的型・フィッシング・Wi-Fi）<br><small>自動採点・正誤判定・解説表示</small></p>
+      </a>
+      <a class="toc-card" href="模擬試験第3回/test.html" style="border-left-color:#5e35b1;">
+        <h4>🎯 第3回 ― 組織・総合編（20問）</h4>
+        <p>第6〜7回中心（リスク管理・ポリシー・物理）<br><small>自動採点・正誤判定・解説表示</small></p>
+      </a>
+    </div>
+    <p style="font-size:0.9em;color:#555;margin-top:14px;">💡 各テストは <b>20問・100点満点</b>。「採点する」ボタンで自動採点され、各問の <b>模範解答／設問意図／解説</b> がインラインで表示されます。</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📘 講義カリキュラム（全15回）</div>
+    <table class="compare">
+      <tr><th>回</th><th>テーマ</th><th>学習項目</th><th>対応資料</th></tr>
+      <tr><td>1</td><td>情報化社会の現状</td><td>導入</td><td>①</td></tr>
+      <tr><td>2</td><td>今日のセキュリティリスク</td><td>導入</td><td>①</td></tr>
+      <tr><td>3</td><td>情報セキュリティの基礎</td><td>基礎</td><td>①②</td></tr>
+      <tr><td>4</td><td>見えない脅威とその対策①</td><td>対策（個人）</td><td>②③</td></tr>
+      <tr><td>5</td><td>見えない脅威とその対策②</td><td>対策（個人）</td><td>③</td></tr>
+      <tr><td>6</td><td>組織の一員としてのセキュリティ対策</td><td>対策（組織）</td><td>④</td></tr>
+      <tr><td>7</td><td>セキュリティ管理者の対策</td><td>対策（組織）</td><td>④</td></tr>
+      <tr><td>8〜11</td><td>セキュリティ技術 ①〜③</td><td>暗号・認証</td><td>未実施</td></tr>
+      <tr><td>12</td><td>セキュリティポリシー</td><td>運用</td><td>④</td></tr>
+      <tr><td>13〜14</td><td>関連法規と制度</td><td>法律</td><td>未実施</td></tr>
+      <tr><td>15</td><td>総合演習</td><td>―</td><td>―</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">✅ テスト対策の最重要ポイント</div>
+    <div class="checkpoint">
+      <h4>必ず押さえる5項目</h4>
+      <ul>
+        <li><strong>情報セキュリティの三大要素（CIA）</strong> ― 機密性 / 完全性 / 可用性の英語名と例</li>
+        <li><strong>マルウェアの分類</strong> ― ウイルス（寄生・増殖）／ワーム（単独・増殖）／トロイの木馬（単独・非増殖）</li>
+        <li><strong>不正アクセスの4段階</strong> ― 事前調査 → 権利取得 → 不正実行 → 後処理</li>
+        <li><strong>リスクマネジメントの4方針</strong> ― 低減・回避・受容・転嫁</li>
+        <li><strong>不正のトライアングル</strong> ― 機会・動機・正当化</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

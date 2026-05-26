@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>情報セキュリティの基礎 ― 解説資料</title>
+<style>
+  body { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', Meiryo, sans-serif; background: #f4f7fb; margin: 0; padding: 20px; color: #222; line-height: 1.75; }
+  .page { max-width: 960px; margin: auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 40px; }
+  .header { background: linear-gradient(135deg, #455a64, #263238); color: white; border-radius: 8px; padding: 24px 30px; margin-bottom: 32px; }
+  .header h1 { margin: 0; font-size: 0.95em; opacity: 0.85; letter-spacing: 2px; }
+  .header h2 { margin: 8px 0 0; font-size: 1.7em; }
+  .header .subtitle { margin-top: 8px; opacity: 0.9; font-size: 0.95em; }
+  .toc { background: #eceff1; border-left: 5px solid #455a64; border-radius: 6px; padding: 16px 24px; margin-bottom: 32px; }
+  .toc h3 { margin: 0 0 10px; color: #455a64; }
+  .toc ol { margin: 6px 0 0 20px; }
+  .toc a { color: #263238; text-decoration: none; font-weight: 500; }
+  .toc a:hover { text-decoration: underline; }
+  .section { margin-bottom: 36px; }
+  .section-title { font-size: 1.2em; font-weight: bold; color: white; background: #263238; border-radius: 6px; padding: 10px 18px; margin-bottom: 16px; }
+  .section-subtitle { font-size: 1.05em; font-weight: bold; color: #455a64; border-bottom: 2px solid #455a64; padding-bottom: 4px; margin: 20px 0 12px; }
+  .overview-box { background: linear-gradient(180deg, #eceff1 0%, white 100%); border: 1px solid #455a64; border-radius: 10px; padding: 24px; text-align: center; }
+  .concept-box { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 18px 22px; margin-bottom: 14px; }
+  .concept-box h4 { margin: 0 0 8px; color: #263238; font-size: 1.1em; }
+  .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .term-card { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 14px 18px; }
+  .term-card .term-name { font-weight: bold; color: #00acc1; font-size: 1.05em; margin-bottom: 6px; }
+  .term-card .term-reading { color: #666; font-size: 0.85em; font-weight: normal; margin-left: 6px; }
+  .term-card .term-def { color: #333; font-size: 0.95em; line-height: 1.7; }
+  .term-card .term-example { background: #fffde7; border-left: 3px solid #fdd835; padding: 6px 10px; margin-top: 8px; font-size: 0.88em; color: #555; }
+  table.compare { border-collapse: collapse; width: 100%; margin: 12px 0; }
+  table.compare th, table.compare td { border: 1px solid #bdbdbd; padding: 10px 14px; text-align: left; vertical-align: top; }
+  table.compare th { background: #455a64; color: white; }
+  table.compare tr:nth-child(even) td { background: #fafafa; }
+  .checkpoint { background: #e8f5e9; border-left: 5px solid #43a047; border-radius: 6px; padding: 14px 20px; margin-top: 14px; }
+  .checkpoint h4 { margin: 0 0 8px; color: #2e7d32; }
+  .note { background: #fff3e0; border-left: 4px solid #fb8c00; border-radius: 4px; padding: 10px 16px; margin: 10px 0; font-size: 0.92em; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <h1>情報・IT・セキュリティ</h1>
+    <h2>① 情報セキュリティの基礎</h2>
+    <div class="subtitle">情報資産を「機密性・完全性・可用性」の3要素で守る ― CIAを中心とした基礎概念の総整理</div>
+  </div>
+
+  <div class="toc">
+    <h3>📑 目次</h3>
+    <ol>
+      <li><a href="#overview">全体像マップ</a></li>
+      <li><a href="#concepts">情報セキュリティの基本概念</a></li>
+      <li><a href="#terms">キーワード辞典</a></li>
+      <li><a href="#relations">関係図・比較</a></li>
+      <li><a href="#checkpoint">確認ポイント</a></li>
+    </ol>
+  </div>
+
+  <div class="section" id="overview">
+    <div class="section-title">🗺️ 1. 全体像マップ</div>
+    <div class="overview-box">
+      <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="300" y="20" width="200" height="60" rx="10" fill="#263238"/>
+        <text x="400" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">情報セキュリティ</text>
+        <!-- branches -->
+        <line x1="400" y1="80" x2="150" y2="150" stroke="#90a4ae" stroke-width="2"/>
+        <line x1="400" y1="80" x2="400" y2="150" stroke="#90a4ae" stroke-width="2"/>
+        <line x1="400" y1="80" x2="650" y2="150" stroke="#90a4ae" stroke-width="2"/>
+        <rect x="60" y="150" width="180" height="50" rx="8" fill="#00acc1"/>
+        <text x="150" y="180" text-anchor="middle" fill="white" font-weight="bold" font-size="14">機密性 C</text>
+        <rect x="310" y="150" width="180" height="50" rx="8" fill="#43a047"/>
+        <text x="400" y="180" text-anchor="middle" fill="white" font-weight="bold" font-size="14">完全性 I</text>
+        <rect x="560" y="150" width="180" height="50" rx="8" fill="#fb8c00"/>
+        <text x="650" y="180" text-anchor="middle" fill="white" font-weight="bold" font-size="14">可用性 A</text>
+        <!-- below -->
+        <text x="150" y="225" text-anchor="middle" fill="#555" font-size="12">情報を見せない</text>
+        <text x="400" y="225" text-anchor="middle" fill="#555" font-size="12">改ざんされない</text>
+        <text x="650" y="225" text-anchor="middle" fill="#555" font-size="12">いつでも使える</text>
+
+        <rect x="100" y="270" width="600" height="80" rx="10" fill="#eceff1" stroke="#455a64"/>
+        <text x="400" y="300" text-anchor="middle" fill="#263238" font-weight="bold" font-size="14">情報資産（守るべき価値のある資産）</text>
+        <text x="400" y="325" text-anchor="middle" fill="#555" font-size="12">有形（PC・サーバ・記録媒体・文書） ／ 無形（OS・データ・ソフトウェア）</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section" id="concepts">
+    <div class="section-title">📘 2. 概念の段階的解説</div>
+
+    <div class="section-subtitle">2-1. 大概念 ― 情報セキュリティとは</div>
+    <div class="concept-box">
+      <h4>定義（ISO27002）</h4>
+      <p><strong>正当な権利を持つ個人や組織が、情報や情報システムを意図通りに制御できること</strong>。具体的には情報の<strong>機密性・完全性・可用性</strong>を維持することと定義されている。</p>
+      <p>背景：Society 5.0（情報社会の高度化）に伴い、コンピュータウイルス・情報漏洩・電子商取引トラブル・コンピュータ犯罪などが増加。被害を防ぎ、また加害者にもならないための知識・技術が必要。</p>
+    </div>
+
+    <div class="section-subtitle">2-2. 中概念 ― 情報セキュリティの三大要素 (CIA)</div>
+    <div class="concept-box">
+      <h4>C: 機密性 (Confidentiality)</h4>
+      <p>情報を<strong>不適切な対象に見せない</strong>こと。脅威の例：ネットワークの盗聴、不正コピー。</p>
+    </div>
+    <div class="concept-box">
+      <h4>I: 完全性 (Integrity)</h4>
+      <p>情報が<strong>完全な形で保たれ、改ざん・破壊されない</strong>こと。脅威の例：データの改ざん、偽造。</p>
+    </div>
+    <div class="concept-box">
+      <h4>A: 可用性 (Availability)</h4>
+      <p>情報や資源が<strong>いつでも利用できる</strong>こと。脅威の例：サービス利用不能攻撃（DoS）、破壊。</p>
+    </div>
+
+    <div class="section-subtitle">2-3. 小概念 ― 情報資産・リスク・インシデント</div>
+    <div class="concept-box">
+      <h4>情報資産</h4>
+      <p>組織が活動を続ける上で必要な「<strong>守るべき価値のある資産</strong>」。<br>
+      ・有形資産：文書、CD/DVD等の記録媒体、サーバ・PCなどのハードウェア、ネットワーク機器<br>
+      ・無形資産：OSやアプリケーションなどのソフトウェア、顧客情報・人事情報・財務情報などのデータ</p>
+    </div>
+    <div class="concept-box">
+      <h4>情報の分類（重要度のランク付け）</h4>
+      <p>非公開：A[機密情報]（例：製品原価表、人事情報、顧客情報）／B[社外秘情報]（例：マーケティング情報、営業所売上高）<br>公開：C[公開情報]（例：公開ウェブページ）</p>
+    </div>
+    <div class="concept-box">
+      <h4>リスクとインシデント</h4>
+      <p><strong>リスク</strong>＝情報資産が脅威によって損なわれる<strong>可能性</strong>。<br><strong>インシデント</strong>＝リスクが実際に顕在化した<strong>事態</strong>。<br>「脅威」が「脆弱性」を突くことでインシデントが発生する。</p>
+    </div>
+  </div>
+
+  <div class="section" id="terms">
+    <div class="section-title">📖 3. キーワード辞典</div>
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-name">情報資産<span class="term-reading">（じょうほうしさん）</span></div>
+        <div class="term-def">組織が守るべき価値のある資産。有形（PC等）と無形（データ等）に分かれる。</div>
+        <div class="term-example">例：顧客情報、ソースコード、サーバ</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">機密性 Confidentiality</div>
+        <div class="term-def">許可された者だけが情報にアクセスできる性質。</div>
+        <div class="term-example">脅威例：盗聴、不正コピー</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">完全性 Integrity</div>
+        <div class="term-def">情報が改ざん・破壊されず、完全な状態を保つ性質。</div>
+        <div class="term-example">脅威例：データ改ざん、偽造</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">可用性 Availability</div>
+        <div class="term-def">必要なときに情報・システムを利用できる性質。</div>
+        <div class="term-example">脅威例：DoS攻撃、システム破壊</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">脅威<span class="term-reading">（きょうい）</span></div>
+        <div class="term-def">情報資産に危害を与える要因。外部要因（マルウェア・侵入）と内部要因（脆弱性・モラル欠如）がある。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">脆弱性<span class="term-reading">（ぜいじゃくせい）</span></div>
+        <div class="term-def">情報システムのセキュリティ上の弱点。「セキュリティホール」とも呼ぶ。</div>
+        <div class="term-example">例：OSの未パッチ、SSL/TLSライブラリの欠陥（Heartbleed）</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">リスク</div>
+        <div class="term-def">脅威により情報資産が損なわれる可能性。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">インシデント</div>
+        <div class="term-def">リスクが実際に発生・顕在化した事態。</div>
+        <div class="term-example">例：個人情報漏洩、ランサムウェア感染</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">情報漏洩</div>
+        <div class="term-def">本来利用を許可していない人に情報が伝わってしまうこと。</div>
+        <div class="term-example">例：ベネッセ事件（お詫び費用200億円）</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">不正アクセス</div>
+        <div class="term-def">権限のないユーザがネットワーク経由でコンピュータに不正侵入・サービス妨害する行為。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">OWASP Top10</div>
+        <div class="term-def">Open Web Application Security Project が公表するWebアプリの代表的脆弱性ランキング。</div>
+        <div class="term-example">1位：アクセス制御の不備　2位：暗号化の失敗　3位：インジェクション</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">情報リテラシー</div>
+        <div class="term-def">情報機器やネットワークを活用する基本的な能力。情報倫理（ネット社会で必要な道徳・モラル）とセットで重要。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="relations">
+    <div class="section-title">🔗 4. 関係図・比較</div>
+
+    <div class="section-subtitle">CIA 三要素の比較表</div>
+    <table class="compare">
+      <tr><th>記号</th><th>要素（英語）</th><th>説明</th><th>脅威の例</th></tr>
+      <tr><td>C</td><td>機密性<br>Confidentiality</td><td>情報を不適切な対象に見せない</td><td>ネットワーク盗聴・不正コピー</td></tr>
+      <tr><td>I</td><td>完全性<br>Integrity</td><td>情報が完全な形で保たれ、改ざん・破壊されない</td><td>データ改ざん・偽造</td></tr>
+      <tr><td>A</td><td>可用性<br>Availability</td><td>情報や資源がいつでも利用できる</td><td>サービス利用不能攻撃（DoS）・破壊</td></tr>
+    </table>
+
+    <div class="section-subtitle">不正行為の種類</div>
+    <table class="compare">
+      <tr><th>不正行為</th><th>内容</th><th>例</th></tr>
+      <tr><td>なりすまし</td><td>正規ユーザのように装い情報収集</td><td>管理者のID/パスワード盗用</td></tr>
+      <tr><td>盗聴</td><td>ネットワーク・端末上のデータ不正入手</td><td>メールの盗み見</td></tr>
+      <tr><td>改ざん</td><td>データの書き換え</td><td>Webページ改ざん</td></tr>
+      <tr><td>破壊</td><td>データの削除</td><td>ファイル削除</td></tr>
+      <tr><td>サービス妨害</td><td>大量の要求で処理不能にする</td><td>Webサーバをダウンさせる</td></tr>
+      <tr><td>踏み台</td><td>他人のPCを中継点として悪用</td><td>DDoS攻撃に加担</td></tr>
+    </table>
+
+    <div class="note">💡 <strong>個人情報漏洩の原因別割合（JNNS 2018）</strong>では、紛失・置忘れ 26.2%、誤操作 24.6%、不正アクセス 20.3% と、人的ミスが大きな割合を占める。</div>
+  </div>
+
+  <div class="section" id="checkpoint">
+    <div class="section-title">✅ 5. 確認ポイント</div>
+    <div class="checkpoint">
+      <h4>必ず押さえる要点</h4>
+      <ul>
+        <li><strong>CIA 3要素の英語名と意味</strong> ― Confidentiality / Integrity / Availability</li>
+        <li><strong>情報資産の分類</strong> ― 有形 vs 無形 の例を1つずつ言える</li>
+        <li><strong>情報の重要度</strong> ― A機密 / B社外秘 / C公開 の3ランク</li>
+        <li><strong>リスクとインシデントの違い</strong> ― 可能性 vs 顕在化した事態</li>
+        <li><strong>脅威の分類</strong> ― 外部要因（マルウェア等）と内部要因（脆弱性・モラル欠如）</li>
+        <li><strong>セキュリティ被害が絶えない理由</strong> ― 「自分だけは大丈夫」という意識</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

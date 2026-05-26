@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>模擬試験 第2回 ― 設問意図</title>
+<style>
+body{font-family:'Hiragino Kaku Gothic Pro','Yu Gothic',Meiryo,sans-serif;background:#f4f7fb;margin:0;padding:20px;color:#222;line-height:1.75;}
+.page{max-width:880px;margin:auto;background:white;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);padding:40px;}
+.header{background:linear-gradient(135deg,#5e35b1,#311b92);color:white;border-radius:8px;padding:24px 30px;margin-bottom:24px;}
+.header h1{margin:0;font-size:0.95em;opacity:0.85;letter-spacing:2px;}
+.header h2{margin:8px 0 0;font-size:1.7em;}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:0.93em;}
+th,td{border:1px solid #bdbdbd;padding:8px 10px;text-align:left;vertical-align:top;}
+th{background:#5e35b1;color:white;}
+tr:nth-child(even) td{background:#fafafa;}
+.note{background:#ede7f6;border-left:5px solid #5e35b1;padding:12px 18px;margin:18px 0;border-radius:4px;font-size:0.93em;}
+.workflow{background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:14px 18px;margin-bottom:24px;font-size:0.92em;}
+.nav{margin-top:24px;text-align:center;font-size:0.9em;}
+.nav a{color:#455a64;margin:0 12px;}
+</style></head><body>
+<div class="page">
+<div class="header"><h1>模擬試験 第2回 ― 応用編</h1><h2>🎯 設問意図と分析</h2></div>
+
+<div class="workflow">
+<strong>📋 作問プロセス（4役分業）</strong><br>
+① <b>設問作成者</b>：第3〜5回の「攻撃手法」を軸に問題を作成<br>
+② <b>設問意図解釈者</b>：各問の出題狙い・予想ミスを分析（本資料）<br>
+③ <b>回答作成者</b>：模範解答と根拠を作成（<a href="answer.html">回答解説</a>）<br>
+④ <b>テスト作成マネージャー</b>：難易度・分野（攻撃/対策）・形式バランスを調整
+</div>
+
+<table>
+<tr><th>問</th><th>形式</th><th>出題テーマ</th><th>狙い</th><th>予想される誤答パターン</th></tr>
+<tr><td>Q1</td><td>穴埋め</td><td>不正アクセス4段階</td><td>4段階の中間の段階を答えられるか</td><td>「侵入」「クラッキング」と書く</td></tr>
+<tr><td>Q2</td><td>四択(誤り選択)</td><td>標的型攻撃の特徴</td><td>「添付がEXE」という典型的な誤解を持っていないか</td><td>「フリーメール多い(D)」を不自然と判断</td></tr>
+<tr><td>Q3</td><td>○×</td><td>ソーシャルエンジニアリング</td><td>マルウェアでなく「人」を狙う攻撃と分かっているか</td><td>名前から「ソフトウェアの一種」と誤認</td></tr>
+<tr><td>Q4</td><td>並び替え</td><td>不正アクセス4段階の順序</td><td>順序の正確性（後処理が最後）を理解</td><td>権利取得と事前調査の前後を逆にする</td></tr>
+<tr><td>Q5</td><td>四択</td><td>フィッシングの定義</td><td>4種類の攻撃を識別できるか</td><td>「偽AP（D）」もフィッシングと混同</td></tr>
+<tr><td>Q6</td><td>複数選択</td><td>公衆Wi-Fi対策</td><td>パスワード使い回しの危険性を理解</td><td>C を選んでしまう</td></tr>
+<tr><td>Q7</td><td>穴埋め</td><td>WPA3</td><td>最新の無線LAN暗号化規格を答えられるか</td><td>「WPA2」「WEP」と書く</td></tr>
+<tr><td>Q8</td><td>用語選択</td><td>Emotet</td><td>有名マルウェアの特徴を識別</td><td>WannaCry と混同</td></tr>
+<tr><td>Q9</td><td>○×</td><td>標的型攻撃の添付形式</td><td>Q2 と関連付けて確実に「×」と判断できるか</td><td>「EXE が多い」を真と思い込み○を選ぶ</td></tr>
+<tr><td>Q10</td><td>記述式</td><td>不正アプリの特徴</td><td>3つの典型的特徴のうち2つを言語化できるか</td><td>1つしか書けない、抽象的な記述になる</td></tr>
+</table>
+
+<div class="note">
+<strong>🎯 第2回の難易度設計</strong><br>
+第1回より一段難度を上げ、Q2・Q9 で<strong>同じテーマ（標的型攻撃の添付形式）</strong>を別形式で出題することで、知識の確かさを多角的に問う。Q4の並び替え、Q6の複数選択など回答形式のバリエーションも増やし、応用力を確認。
+</div>
+
+<div class="note">
+<strong>🔁 ブラッシュアップ履歴（マネージャー視点）</strong><br>
+・初版では Q5・Q6 の主題が重複（フィッシング・Wi-Fi 両方で同じ知識を問う）したため、Q5 はフィッシングの「識別」、Q6 はWi-Fi の「対策実践」に分離<br>
+・Q8 にダミー選択肢として「Mirai」「Heartbleed」を入れ、用語の細かい識別を要求<br>
+・Q10 の選択肢数を「特徴3つ」→「特徴2つを記述」に変更し、機械的選択にならないよう調整
+</div>
+
+<div class="nav"><a href="test.html">◀ テストへ戻る</a> ｜ <a href="answer.html">▶ 回答解説</a> ｜ <a href="../00_全体マップ.html">▶ 全体マップ</a></div>
+</div></body></html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>攻撃手法と対策 ― 解説資料</title>
+<style>
+  body { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', Meiryo, sans-serif; background: #f4f7fb; margin: 0; padding: 20px; color: #222; line-height: 1.75; }
+  .page { max-width: 960px; margin: auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 40px; }
+  .header { background: linear-gradient(135deg, #455a64, #263238); color: white; border-radius: 8px; padding: 24px 30px; margin-bottom: 32px; }
+  .header h1 { margin: 0; font-size: 0.95em; opacity: 0.85; letter-spacing: 2px; }
+  .header h2 { margin: 8px 0 0; font-size: 1.7em; }
+  .header .subtitle { margin-top: 8px; opacity: 0.9; font-size: 0.95em; }
+  .toc { background: #eceff1; border-left: 5px solid #455a64; border-radius: 6px; padding: 16px 24px; margin-bottom: 32px; }
+  .toc h3 { margin: 0 0 10px; color: #455a64; }
+  .toc ol { margin: 6px 0 0 20px; }
+  .toc a { color: #263238; text-decoration: none; font-weight: 500; }
+  .section { margin-bottom: 36px; }
+  .section-title { font-size: 1.2em; font-weight: bold; color: white; background: #263238; border-radius: 6px; padding: 10px 18px; margin-bottom: 16px; }
+  .section-subtitle { font-size: 1.05em; font-weight: bold; color: #455a64; border-bottom: 2px solid #455a64; padding-bottom: 4px; margin: 20px 0 12px; }
+  .overview-box { background: linear-gradient(180deg, #eceff1 0%, white 100%); border: 1px solid #455a64; border-radius: 10px; padding: 24px; text-align: center; }
+  .concept-box { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 18px 22px; margin-bottom: 14px; }
+  .concept-box h4 { margin: 0 0 8px; color: #263238; font-size: 1.1em; }
+  .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .term-card { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 14px 18px; }
+  .term-card .term-name { font-weight: bold; color: #00acc1; font-size: 1.05em; margin-bottom: 6px; }
+  .term-card .term-def { color: #333; font-size: 0.95em; line-height: 1.7; }
+  .term-card .term-example { background: #fffde7; border-left: 3px solid #fdd835; padding: 6px 10px; margin-top: 8px; font-size: 0.88em; color: #555; }
+  table.compare { border-collapse: collapse; width: 100%; margin: 12px 0; }
+  table.compare th, table.compare td { border: 1px solid #bdbdbd; padding: 10px 14px; text-align: left; vertical-align: top; }
+  table.compare th { background: #455a64; color: white; }
+  table.compare tr:nth-child(even) td { background: #fafafa; }
+  .checkpoint { background: #e8f5e9; border-left: 5px solid #43a047; border-radius: 6px; padding: 14px 20px;}
+  .checkpoint h4 { margin: 0 0 8px; color: #2e7d32; }
+  .note { background: #fff3e0; border-left: 4px solid #fb8c00; border-radius: 4px; padding: 10px 16px; margin: 10px 0; font-size: 0.92em; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <h1>情報・IT・セキュリティ</h1>
+    <h2>③ 攻撃手法と個人での対策</h2>
+    <div class="subtitle">標的型攻撃・誘導型攻撃・フィッシング詐欺・スマホ・無線LANの脅威を理解し、個人レベルの対策を身につける</div>
+  </div>
+
+  <div class="toc">
+    <h3>📑 目次</h3>
+    <ol>
+      <li><a href="#overview">全体像マップ</a></li>
+      <li><a href="#concepts">攻撃手法の解説</a></li>
+      <li><a href="#terms">キーワード辞典</a></li>
+      <li><a href="#relations">対策の比較表</a></li>
+      <li><a href="#checkpoint">確認ポイント</a></li>
+    </ol>
+  </div>
+
+  <div class="section" id="overview">
+    <div class="section-title">🗺️ 1. 全体像マップ</div>
+    <div class="overview-box">
+      <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="290" y="20" width="220" height="60" rx="10" fill="#263238"/>
+        <text x="400" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">「見えない脅威」と対策</text>
+        <!-- 二分岐：能動型・誘導型 -->
+        <line x1="400" y1="80" x2="180" y2="140" stroke="#90a4ae" stroke-width="2"/>
+        <line x1="400" y1="80" x2="620" y2="140" stroke="#90a4ae" stroke-width="2"/>
+        <rect x="80" y="140" width="200" height="50" rx="8" fill="#e53935"/>
+        <text x="180" y="170" text-anchor="middle" fill="white" font-weight="bold" font-size="14">能動型攻撃</text>
+        <rect x="520" y="140" width="200" height="50" rx="8" fill="#fb8c00"/>
+        <text x="620" y="170" text-anchor="middle" fill="white" font-weight="bold" font-size="14">受動型（誘導型）攻撃</text>
+        <text x="180" y="210" text-anchor="middle" fill="#555" font-size="12">直接サーバを攻撃</text>
+        <text x="620" y="210" text-anchor="middle" fill="#555" font-size="12">利用者を罠に誘導</text>
+        <!-- 具体例 -->
+        <rect x="40" y="240" width="290" height="100" rx="10" fill="#eceff1" stroke="#e53935"/>
+        <text x="185" y="265" text-anchor="middle" fill="#263238" font-weight="bold" font-size="13">サーバ脆弱性攻撃 / DoS</text>
+        <text x="185" y="290" text-anchor="middle" fill="#555" font-size="12">FW通過は難しい</text>
+        <rect x="470" y="240" width="290" height="100" rx="10" fill="#eceff1" stroke="#fb8c00"/>
+        <text x="615" y="265" text-anchor="middle" fill="#263238" font-weight="bold" font-size="13">標的型攻撃メール / フィッシング</text>
+        <text x="615" y="290" text-anchor="middle" fill="#555" font-size="12">不正アプリ / 偽Webサイト</text>
+        <text x="615" y="315" text-anchor="middle" fill="#555" font-size="12">無線LAN盗聴 / 公衆Wi-Fi 偽AP</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section" id="concepts">
+    <div class="section-title">📘 2. 攻撃手法の解説</div>
+
+    <div class="section-subtitle">2-1. 標的型攻撃</div>
+    <div class="concept-box">
+      <h4>定義</h4>
+      <p>主に電子メールを用いて<strong>特定の組織や個人を狙う攻撃</strong>。不特定多数を狙わないため防ぐのが難しい。</p>
+      <h4>特徴</h4>
+      <ul>
+        <li>攻撃者は標的を綿密に調査して攻撃を仕掛ける</li>
+        <li>実在する組織や人物になりすます</li>
+        <li>メールの本文・添付ファイル名は受信者に関連する内容</li>
+        <li>添付ファイルは EXE 等の実行形式ではなく、<strong>Word・Excel・PDF などの文書ファイル</strong>であることが多い</li>
+        <li>フリーメールで送られてくることが多い</li>
+        <li>長期間にわたって標的とされる</li>
+      </ul>
+    </div>
+
+    <div class="section-subtitle">2-2. 誘導型攻撃 vs 能動型攻撃</div>
+    <div class="concept-box">
+      <h4>能動的攻撃</h4>
+      <p>攻撃者が<strong>直接サーバなどを攻撃</strong>。イントラネット内への攻撃は難しい。攻撃される側の行動は不要で、いつでも攻撃可能。</p>
+      <h4>受動的（誘導型）攻撃</h4>
+      <p>攻撃者は利用者が<strong>特定の行動をとるよう誘導</strong>。ファイアウォール（FW）で許可されているWeb・メール等を利用した攻撃。イントラネット内のシステムの攻撃に多用される。</p>
+    </div>
+
+    <div class="section-subtitle">2-3. フィッシング詐欺</div>
+    <div class="concept-box">
+      <h4>定義</h4>
+      <p>巧妙な文面のメール等を用い、実在する金融企業・信販会社などのWebサイトを装った<strong>偽サイトに誘導</strong>し、クレジットカード番号・ID・パスワードを入力させて盗み取る不正行為。</p>
+      <h4>被害例</h4>
+      <ul>
+        <li>インターネットバンキングへの不正アクセス・不正出金</li>
+        <li>クレジットカード情報の不正利用</li>
+        <li>個人情報の売買、偽造カードの発行</li>
+      </ul>
+      <p>近年、令和5年は被害件数 5,147件・被害額 約80億円と急増している（金融庁公表）。</p>
+    </div>
+
+    <div class="section-subtitle">2-4. スマートフォンの脅威</div>
+    <div class="concept-box">
+      <h4>不正アプリの特徴</h4>
+      <ul>
+        <li>インストール時、アプリの機能とは関係ない権限の利用許可を求める</li>
+        <li>権限確認画面の背景色や文字色が、公式マーケットのものと異なる</li>
+        <li>インストール後、配信場所で提示されていた名称と別の名称が表示される</li>
+      </ul>
+    </div>
+
+    <div class="section-subtitle">2-5. 無線LAN（Wi-Fi）の脅威</div>
+    <div class="concept-box">
+      <h4>主な脅威</h4>
+      <ul>
+        <li>電波傍受による盗聴</li>
+        <li>家庭の無線LANへの<strong>ただ乗り接続</strong>からサイバー犯罪に悪用</li>
+        <li>社内ネットワークへの侵入</li>
+        <li>公衆無線LANでの<strong>偽アクセスポイント</strong>に接続することで通信内容が読み取られる</li>
+      </ul>
+      <h4>自宅で無線LANを使う際のセキュリティ対策</h4>
+      <p>・暗号化は <strong>WPA3</strong> を使用する<br>・パスワードは「大文字＋小文字＋数字＋記号」を組み合わせ、<strong>20文字以上の長い文字列</strong>に設定する</p>
+    </div>
+  </div>
+
+  <div class="section" id="terms">
+    <div class="section-title">📖 3. キーワード辞典</div>
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-name">標的型攻撃</div>
+        <div class="term-def">特定の組織・個人を狙う攻撃。電子メールが主な手段。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">ばらまき型メール</div>
+        <div class="term-def">特定の組織や団体向けにカスタマイズした文言・ファイルを添付し、不特定多数に送信するメール攻撃。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">フィッシング詐欺 Phishing</div>
+        <div class="term-def">偽のWebサイトに誘導し、認証情報を盗み取る不正行為。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">ソーシャルエンジニアリング</div>
+        <div class="term-def">人間の心理的な隙や行動上のミスにつけ込んで秘密情報を盗み取る攻撃。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">受動型攻撃</div>
+        <div class="term-def">利用者を罠（不審メール・Webページ）に誘導することで侵害を行う攻撃。FWを通過しやすい。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">能動型攻撃</div>
+        <div class="term-def">攻撃者が直接サーバ等を攻撃する手法。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">偽アクセスポイント</div>
+        <div class="term-def">公衆無線LANを装って設置された不正な接続点。接続すると通信内容を傍受される。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">WPA3</div>
+        <div class="term-def">無線LAN通信を暗号化する規格の最新版。家庭の無線LAN設定で推奨される。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">IPA 情報セキュリティ安心相談窓口</div>
+        <div class="term-def">公的機関（IPA）が提供する情報セキュリティ全般の相談窓口。不審な事象は相談すべき。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="relations">
+    <div class="section-title">🔗 4. 対策の比較表</div>
+
+    <div class="section-subtitle">標的型攻撃 vs ばらまき型メール</div>
+    <table class="compare">
+      <tr><th>項目</th><th>標的型攻撃</th><th>ばらまき型メール</th></tr>
+      <tr><td>対象</td><td>特定の組織・個人</td><td>不特定多数</td></tr>
+      <tr><td>調査</td><td>綿密に行う</td><td>軽い</td></tr>
+      <tr><td>本文</td><td>受信者に関連する内容</td><td>汎用的</td></tr>
+      <tr><td>添付</td><td>Word・Excel・PDF</td><td>同上＋圧縮ファイル</td></tr>
+      <tr><td>送信元</td><td>フリーメール／実在組織の偽装</td><td>フリーメール多用</td></tr>
+    </table>
+
+    <div class="section-subtitle">攻撃別の対策</div>
+    <table class="compare">
+      <tr><th>攻撃</th><th>個人ができる対策</th></tr>
+      <tr><td>標的型攻撃</td><td>日頃からメールに注意／フリーメールを慎重にチェック／添付の偽装確認／不審なら組織のセキュリティ管理者（本学ではノートPCサポート室）に問い合わせ／IPAに相談</td></tr>
+      <tr><td>フィッシング詐欺</td><td>URLを直接タイプ／ブックマークから接続／HTTPS・正規ドメインを確認／公式アプリ経由でログイン</td></tr>
+      <tr><td>不正アプリ</td><td>権限要求の妥当性を確認／公式マーケットからインストール／レビュー・評価を確認するだけでなく、要求権限を必ずチェック</td></tr>
+      <tr><td>無線LAN</td><td>WPA3で暗号化／20文字以上の強いパスワード／公衆Wi-Fiでは重要操作を行わない／VPN利用</td></tr>
+    </table>
+  </div>
+
+  <div class="section" id="checkpoint">
+    <div class="section-title">✅ 5. 確認ポイント</div>
+    <div class="checkpoint">
+      <h4>必ず押さえる要点</h4>
+      <ul>
+        <li><strong>標的型攻撃の添付ファイル</strong> ― EXEではなく Word/Excel/PDF などの文書ファイルが多い</li>
+        <li><strong>能動的攻撃と受動的（誘導型）攻撃の違い</strong> ― 直接攻撃 vs 利用者を罠に誘導</li>
+        <li><strong>フィッシング詐欺で狙われる情報</strong> ― ID、パスワード、クレジットカード番号</li>
+        <li><strong>ソーシャルエンジニアリング</strong> ― 技術ではなく「人の心理」を突く攻撃</li>
+        <li><strong>不正アプリの特徴</strong> ― アプリの機能と無関係な権限を要求する</li>
+        <li><strong>家庭の無線LAN対策</strong> ― WPA3 ＋ 20文字以上のパスワード</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>
