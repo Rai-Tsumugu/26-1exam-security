@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>組織のセキュリティ管理 ― 解説資料</title>
+<style>
+  body { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', Meiryo, sans-serif; background: #f4f7fb; margin: 0; padding: 20px; color: #222; line-height: 1.75; }
+  .page { max-width: 960px; margin: auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 40px; }
+  .header { background: linear-gradient(135deg, #455a64, #263238); color: white; border-radius: 8px; padding: 24px 30px; margin-bottom: 32px; }
+  .header h1 { margin: 0; font-size: 0.95em; opacity: 0.85; letter-spacing: 2px; }
+  .header h2 { margin: 8px 0 0; font-size: 1.7em; }
+  .header .subtitle { margin-top: 8px; opacity: 0.9; font-size: 0.95em; }
+  .toc { background: #eceff1; border-left: 5px solid #455a64; border-radius: 6px; padding: 16px 24px; margin-bottom: 32px; }
+  .toc h3 { margin: 0 0 10px; color: #455a64; }
+  .toc ol { margin: 6px 0 0 20px; }
+  .toc a { color: #263238; text-decoration: none; font-weight: 500; }
+  .section { margin-bottom: 36px; }
+  .section-title { font-size: 1.2em; font-weight: bold; color: white; background: #263238; border-radius: 6px; padding: 10px 18px; margin-bottom: 16px; }
+  .section-subtitle { font-size: 1.05em; font-weight: bold; color: #455a64; border-bottom: 2px solid #455a64; padding-bottom: 4px; margin: 20px 0 12px; }
+  .overview-box { background: linear-gradient(180deg, #eceff1 0%, white 100%); border: 1px solid #455a64; border-radius: 10px; padding: 24px; text-align: center; }
+  .concept-box { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 18px 22px; margin-bottom: 14px; }
+  .concept-box h4 { margin: 0 0 8px; color: #263238; font-size: 1.1em; }
+  .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .term-card { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 14px 18px; }
+  .term-card .term-name { font-weight: bold; color: #00acc1; font-size: 1.05em; margin-bottom: 6px; }
+  .term-card .term-def { color: #333; font-size: 0.95em; line-height: 1.7; }
+  .term-card .term-example { background: #fffde7; border-left: 3px solid #fdd835; padding: 6px 10px; margin-top: 8px; font-size: 0.88em; color: #555; }
+  table.compare { border-collapse: collapse; width: 100%; margin: 12px 0; }
+  table.compare th, table.compare td { border: 1px solid #bdbdbd; padding: 10px 14px; text-align: left; vertical-align: top; }
+  table.compare th { background: #455a64; color: white; }
+  table.compare tr:nth-child(even) td { background: #fafafa; }
+  .checkpoint { background: #e8f5e9; border-left: 5px solid #43a047; border-radius: 6px; padding: 14px 20px;}
+  .checkpoint h4 { margin: 0 0 8px; color: #2e7d32; }
+  .note { background: #fff3e0; border-left: 4px solid #fb8c00; border-radius: 4px; padding: 10px 16px; margin: 10px 0; font-size: 0.92em; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <h1>情報・IT・セキュリティ</h1>
+    <h2>④ 組織のセキュリティ管理</h2>
+    <div class="subtitle">情報資産の管理、リスク評価、法令遵守、BCP、監査の基礎</div>
+  </div>
+
+  <div class="toc">
+    <h3>📑 目次</h3>
+    <ol>
+      <li><a href="#overview">全体像マップ</a></li>
+      <li><a href="#concepts">組織における管理の要点</a></li>
+      <li><a href="#terms">キーワード辞典</a></li>
+      <li><a href="#relations">管理プロセスの比較</a></li>
+      <li><a href="#checkpoint">確認ポイント</a></li>
+    </ol>
+  </div>
+
+  <div class="section" id="overview">
+    <div class="section-title">🗺️ 1. 全体像マップ</div>
+    <div class="overview-box">
+      <svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg">
+        <rect x="260" y="20" width="280" height="60" rx="10" fill="#263238"/>
+        <text x="400" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">組織のセキュリティ管理</text>
+        <line x1="400" y1="80" x2="120" y2="160" stroke="#90a4ae" stroke-width="2"/>
+        <line x1="400" y1="80" x2="400" y2="160" stroke="#90a4ae" stroke-width="2"/>
+        <line x1="400" y1="80" x2="680" y2="160" stroke="#90a4ae" stroke-width="2"/>
+        <rect x="40" y="160" width="200" height="60" rx="8" fill="#7e57c2"/>
+        <text x="140" y="195" text-anchor="middle" fill="white" font-weight="bold" font-size="15">情報資産管理</text>
+        <rect x="300" y="160" width="200" height="60" rx="8" fill="#43a047"/>
+        <text x="400" y="195" text-anchor="middle" fill="white" font-weight="bold" font-size="15">リスク評価</text>
+        <rect x="560" y="160" width="200" height="60" rx="8" fill="#fb8c00"/>
+        <text x="660" y="195" text-anchor="middle" fill="white" font-weight="bold" font-size="15">監査 & BCP</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section" id="concepts">
+    <div class="section-title">📘 2. 組織における管理の要点</div>
+
+    <div class="section-subtitle">2-1. 情報資産管理</div>
+    <div class="concept-box">
+      <h4>棚卸と分類</h4>
+      <p>情報資産を洗い出し、機密性・完全性・可用性の観点から重要度を分類する。<br>重要資産は特に厳格な管理を行う。</p>
+    </div>
+
+    <div class="section-subtitle">2-2. リスク評価</div>
+    <div class="concept-box">
+      <h4>リスク評価の流れ</h4>
+      <ol>
+        <li>資産の特定</li>
+        <li>脅威の特定</li>
+        <li>脆弱性の特定</li>
+        <li>リスクの算出（発生確率×影響度）</li>
+        <li>対応策の優先順位付け</li>
+      </ol>
+    </div>
+
+    <div class="section-subtitle">2-3. 法令遵守（コンプライアンス）と個人情報保護</div>
+    <div class="concept-box">
+      <h4>個人情報保護法・GDPR 等</h4>
+      <p>個人情報の取り扱いに関する国内法・国際規制の遵守は必須。データ処理の目的を明確化し、適切な管理を行う。</p>
+    </div>
+
+    <div class="section-subtitle">2-4. 監査とBCP</div>
+    <div class="concept-box">
+      <h4>監査</h4>
+      <p>外部監査・内部監査により運用の適切性を評価する。定期的な見直しが重要。</p>
+      <h4>BCP（事業継続計画）</h4>
+      <p>自然災害やサイバー攻撃発生時に業務を継続または迅速に復旧するための計画を策定・訓練する。</p>
+    </div>
+  </div>
+
+  <div class="section" id="terms">
+    <div class="section-title">📖 3. キーワード辞典</div>
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-name">情報資産の分類</div>
+        <div class="term-def">社内のデータ、システム、人的資源、設備などを資産とみなす。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">ISMS（情報セキュリティマネジメントシステム）</div>
+        <div class="term-def">組織の情報セキュリティを継続的に管理・改善するための仕組み。ISO/IEC 27001に準拠。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">リスクアセスメント</div>
+        <div class="term-def">リスクの評価・分類・対策の優先順位付けを行う活動。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">BCP（事業継続計画）</div>
+        <div class="term-def">災害・事故発生時の業務継続計画。復旧手順や優先順位を定める。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">監査</div>
+        <div class="term-def">規程や運用が適切に行われているかを検証する活動。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">インシデント対応</div>
+        <div class="term-def">被害発生時の初動対応、原因調査、再発防止策の実施を行うプロセス。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="relations">
+    <div class="section-title">🔗 4. 管理プロセスの比較</div>
+
+    <table class="compare">
+      <tr><th>活動</th><th>目的</th><th>頻度</th></tr>
+      <tr><td>情報資産の棚卸</td><td>資産の把握</td><td>年次/随時</td></tr>
+      <tr><td>リスク評価</td><td>対策優先順位の決定</td><td>年次/大きな変更時</td></tr>
+      <tr><td>監査</td><td>運用の適正性確認</td><td>年次/四半期</td></tr>
+      <tr><td>BCP訓練</td><td>緊急時の対応力向上</td><td>年次/定期</td></tr>
+    </table>
+  </div>
+
+  <div class="section" id="checkpoint">
+    <div class="section-title">✅ 5. 確認ポイント</div>
+    <div class="checkpoint">
+      <h4>必ず押さえる要点</h4>
+      <ul>
+        <li>情報資産の特定と重要度の分類を行うこと</li>
+        <li>リスク評価は定期的に見直すこと</li>
+        <li>法令遵守・個人情報保護の観点を常に考慮すること</li>
+        <li>インシデント発生時は初動対応が鍵となる</li>
+        <li>BCPは計画するだけでなく訓練して実効性を確認すること</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>
