@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>模擬試験 第2回 ― 応用編（自動採点）</title>
 <style>
-/* styles copied from original */
 body{font-family:'Hiragino Kaku Gothic Pro','Yu Gothic',Meiryo,sans-serif;background:#f4f7fb;margin:0;padding:20px;color:#222;line-height:1.7;}
 .page{max-width:920px;margin:auto;background:white;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);padding:40px;}
 .header{background:linear-gradient(135deg,#455a64,#263238);color:white;border-radius:8px;padding:24px 30px;margin-bottom:24px;}
@@ -77,16 +76,183 @@ const refMap = {
   1:'tc', 2:'ac', 3:'at', 4:'tr', 5:'ac', 6:'ar', 7:'ac', 8:'tt', 9:'ac', 10:'ac',
   11:'tt', 12:'tc', 13:'ac', 14:'ac', 15:'ac', 16:'ac', 17:'ac', 18:'tr', 19:'ac', 20:'tc'
 };
-const questions = [ /* copied from original exam2 questions */ ];
+const questions = [
+  {id:1, type:'text', tag:'穴埋め',
+    text:'不正アクセスの4つの段階は、「事前調査」「（　？　）」「不正実行」「後処理」の順に進む。',
+    answer:['権利取得'],
+    intent:'4段階の中間ステップを答えられるか。',
+    explanation:'パスワードクラッキングなどでアカウント情報を取得する段階。'},
+  {id:2, type:'radio', tag:'四択(誤り)',
+    text:'標的型攻撃の特徴として「誤っている」ものはどれか。',
+    options:['A. 攻撃者は標的を綿密に調査して攻撃する','B. 実在する組織や人物になりすます','C. 添付ファイルは主にEXEなどの実行形式である','D. メールはフリーメールで送られてくることが多い'],
+    answer:'C',
+    intent:'EXE という典型的な誤解を持っていないか。',
+    explanation:'実際は Word・Excel・PDF などの文書ファイルが多用される。'},
+  {id:3, type:'radio', tag:'○×',
+    text:'ソーシャルエンジニアリングは、コンピュータの脆弱性を突くマルウェアの一種である。',
+    options:['○（正しい）','×（誤り）'],
+    answer:'×（誤り）',
+    intent:'マルウェアでなく「人」を狙う攻撃と分かっているか。',
+    explanation:'ソーシャルエンジニアリングは人間の心理的隙・行動上のミスにつけ込む攻撃手法。'},
+  {id:4, type:'text', tag:'並び替え',
+    text:'不正アクセスの4段階を正しい順に並べたとき、最後に来るものは何か（漢字3〜4字）。',
+    answer:['後処理'],
+    intent:'4段階の順序を理解（ログ消去で終わる）。',
+    explanation:'事前調査→権利取得→不正実行→後処理。後処理ではログ消去・改ざんが行われる。'},
+  {id:5, type:'radio', tag:'四択',
+    text:'フィッシング詐欺の手口として最も適切なものはどれか。',
+    options:['A. PC内のファイルを暗号化し金銭要求','B. 偽メールで偽サイトに誘導しID・パスワードを盗む','C. ボットネットで大量データ送信','D. 偽AP設置で通信内容を傍受'],
+    answer:'B',
+    intent:'4種類の攻撃を識別できるか。',
+    explanation:'A=ランサムウェア、C=DDoS、D=公衆Wi-Fi の偽AP。'},
+  {id:6, type:'checkbox', tag:'複数選択',
+    text:'公衆無線LAN利用時のセキュリティ対策として「適切なもの」を<strong>すべて</strong>選びなさい。',
+    options:['A. VPN を併用して通信を暗号化','B. 重要なログインは行わない','C. どのAPでも同じパスワード使い回し','D. 機密情報は送信しない'],
+    answer:['A','B','D'],
+    intent:'パスワード使い回しの危険性を理解しているか。',
+    explanation:'Cは漏洩時に被害が連鎖するため厳禁。'},
+  {id:7, type:'text', tag:'穴埋め',
+    text:'自宅で無線LANを使う際は、通信の暗号化に最新規格の（　？　）を使用することが望ましい。',
+    answer:['WPA3','wpa3'],
+    intent:'最新の暗号化規格名を答えられるか。',
+    explanation:'WPA3 は WPA2 の後継。家庭用無線LAN に推奨される。'},
+  {id:8, type:'radio', tag:'用語選択',
+    text:'「主にメール経由で感染を広げ、メールアドレスやパスワードを窃取し、他のマルウェアにも感染させる」マルウェアはどれか。',
+    options:['A. WannaCry','B. Emotet','C. Heartbleed','D. Mirai'],
+    answer:'B',
+    intent:'有名マルウェアの特徴を識別。',
+    explanation:'A=ランサムウェア、C=SSL/TLS の脆弱性、D=IoT機器を狙うボット。'},
+  {id:9, type:'radio', tag:'○×',
+    text:'標的型攻撃では添付ファイルにEXE形式が多用されるため、Word・PDFファイルであれば安全である。',
+    options:['○（正しい）','×（誤り）'],
+    answer:'×（誤り）',
+    intent:'Q2 と関連して同じテーマを別形式で問う。',
+    explanation:'実態は逆で、Word・Excel・PDF などの文書ファイルが多用される。'},
+  {id:10, type:'checkbox', tag:'複数選択',
+    text:'スマートフォンの不正アプリの特徴として「該当するもの」をすべて選びなさい。',
+    options:['A. アプリの機能と無関係な権限を要求する','B. 公式マーケットには絶対に存在しない','C. 権限確認画面の色が公式と異なる','D. インストール後に別の名称が表示される'],
+    answer:['A','C','D'],
+    intent:'不正アプリの3つの典型的特徴を把握しているか。',
+    explanation:'Bは誤り。公式マーケットに紛れ込んだ事例もある（高評価でも安心できない）。'},
+  {id:11, type:'radio', tag:'四択',
+    text:'ランサムウェアの仕組みとして最も正しいものはどれか。',
+    options:['A. 偽サイトに誘導して個人情報を盗む','B. ファイルを暗号化し復元の代償として金銭を要求する','C. ボットネットでサーバを攻撃する','D. メール送信元を偽装する'],
+    answer:'B',
+    intent:'ランサム＝身代金 の意味を理解しているか。',
+    explanation:'ransom = 身代金。暗号化解除のキーと引き換えに金銭（多くは仮想通貨）を要求。'},
+  {id:12, type:'radio', tag:'用語選択',
+    text:'2017年に世界中で大規模な被害を出した代表的なランサムウェアはどれか。',
+    options:['A. Emotet','B. WannaCry','C. Stuxnet','D. ILOVEYOU'],
+    answer:'B',
+    intent:'有名ランサムウェアの名前を覚えているか。',
+    explanation:'WannaCry は Bitcoin で身代金を要求するワーム型ランサムウェア。'},
+  {id:13, type:'radio', tag:'○×',
+    text:'標的型攻撃メールはフリーメールから送られてくることが多い。',
+    options:['○（正しい）','×（誤り）'],
+    answer:'○（正しい）',
+    intent:'送信元の特徴を理解しているか。',
+    explanation:'フリーメール（Gmail等）でも実在組織を装って送られる。送信元アドレスは慎重に確認。'},
+  {id:14, type:'radio', tag:'四択',
+    text:'「攻撃者が利用者を罠（不審メール・Webページ）に誘導することで侵害を行う攻撃」の名称はどれか。',
+    options:['A. 能動的攻撃','B. 受動的（誘導型）攻撃','C. DoS攻撃','D. ブルートフォース攻撃'],
+    answer:'B',
+    intent:'能動 vs 受動の区別。',
+    explanation:'能動的攻撃＝直接サーバを攻撃／受動的攻撃＝利用者を罠に誘導。'},
+  {id:15, type:'radio', tag:'○×',
+    text:'街中の公衆無線LANに接続する際、偽のアクセスポイントに接続してしまうと通信内容を傍受される危険がある。',
+    options:['○（正しい）','×（誤り）'],
+    answer:'○（正しい）',
+    intent:'偽AP の脅威を理解しているか。',
+    explanation:'正規のAPに似たSSIDを設定した偽APによる中間者攻撃が報告されている。'},
+  {id:16, type:'text', tag:'穴埋め',
+    text:'自宅の無線LANパスワードは、大文字・小文字・数字・記号を組み合わせ、（　？　）文字以上の長い文字列が望ましい。',
+    answer:['20','２０'],
+    intent:'推奨パスワード長を覚えているか。',
+    explanation:'講義では20文字以上が推奨されている。'},
+  {id:17, type:'radio', tag:'○×',
+    text:'標的型攻撃は短期間で1度の攻撃を仕掛けるだけで、長期間にわたる攻撃は稀である。',
+    options:['○（正しい）','×（誤り）'],
+    answer:'×（誤り）',
+    intent:'標的型攻撃の特徴（長期化）を理解しているか。',
+    explanation:'毎回内容を変えて長期間にわたり標的とされることが多い。'},
+  {id:18, type:'radio', tag:'四択',
+    text:'マルウェアに感染した場合、最も安全で確実な駆除方法はどれか。',
+    options:['A. ウイルス対策ソフトで検査するのみ','B. システムの初期化とOS・アプリの再インストール','C. PC を放置して時間経過を待つ','D. ファイルを手動で1つずつ削除'],
+    answer:'B',
+    intent:'感染時の最終手段を把握しているか。',
+    explanation:'潜伏した脅威も完全に除去するため、初期化と再インストールが最も確実。'},
+  {id:19, type:'radio', tag:'四択',
+    text:'近年、インターネットバンキングを狙ったフィッシング詐欺で<strong>令和5年</strong>の不正送金被害件数は約何件か。',
+    options:['A. 約500件','B. 約1,000件','C. 約3,000件','D. 約5,000件'],
+    answer:'D',
+    intent:'最新の被害動向を把握しているか。',
+    explanation:'令和5年は 5,147件・被害額 約80億円。直近で急増した。'},
+  {id:20, type:'text', tag:'並び替え',
+    text:'サイバーキルチェーンの最初の3段階「①武器化 ②偵察 ③デリバリー」を、正しい順に並べたときの<strong>最初</strong>のステップは何か（漢字2字）。',
+    answer:['偵察'],
+    intent:'サイバーキルチェーンの段階順を理解しているか。',
+    explanation:'正しい順は 偵察→武器化→デリバリー→エクスプロイト→侵入→潜伏→目的の実行。'}
+];
 
 const quiz = document.getElementById('quiz');
-function renderQuiz(){ /* original rendering code */ }
-function formatAnswer(q){ /* ... */ }
-function getUserAnswer(q){ /* ... */ }
-function isCorrect(q,user){ /* ... */ }
-function grade(){ /* ... */ }
-function toggleReview(){ /* ... */ }
-function reset(){ /* ... */ }
+function renderQuiz(){
+  quiz.innerHTML = questions.map(q => {
+    let body='';
+    if(q.type==='radio') body = q.options.map(o=>`<label class="opt"><input type="radio" name="q${q.id}" value="${o.split('.')[0].trim()}"> ${o}</label>`).join('');
+    else if(q.type==='checkbox') body = q.options.map(o=>`<label class="opt"><input type="checkbox" name="q${q.id}" value="${o.split('.')[0].trim()}"> ${o}</label>`).join('');
+    else body = `<input type="text" id="q${q.id}" placeholder="回答を入力">`;
+    return `<div class="q" id="qbox${q.id}">
+      <div class="q-head"><span class="q-tag">Q${q.id} ${q.tag}</span><span class="q-mark" id="mark${q.id}"></span></div>
+      <div class="q-body">${q.text}</div>${body}
+      <div class="review" id="review${q.id}">
+        <h4><span class="label">模範解答</span>${formatAnswer(q)}</h4>
+        <h4><span class="label" style="background:#5e35b1;">設問意図</span></h4><div>${q.intent}</div>
+        <h4><span class="label" style="background:#43a047;">解説</span></h4><div>${q.explanation}</div>
+        ${refMap[q.id] ? `<div style="margin-top:10px;"><a href="${REF[refMap[q.id]].url}" target="_blank" style="display:inline-block;background:#fb8c00;color:white;padding:6px 14px;border-radius:6px;text-decoration:none;font-size:0.88em;">${REF[refMap[q.id]].label} 🔗</a></div>` : ''}
+      </div></div>`;
+  }).join('');
+}
+function formatAnswer(q){
+  if(q.type==='text') return q.answer[0];
+  if(q.type==='checkbox') return q.answer.join('・');
+  return q.answer;
+}
+function getUserAnswer(q){
+  if(q.type==='radio'){const s=document.querySelector(`input[name="q${q.id}"]:checked`);return s?s.value:null;}
+  if(q.type==='checkbox') return Array.from(document.querySelectorAll(`input[name="q${q.id}"]:checked`)).map(e=>e.value).sort();
+  return document.getElementById(`q${q.id}`).value.trim();
+}
+function isCorrect(q,user){
+  if(user===null||user===''||(Array.isArray(user)&&user.length===0)) return false;
+  if(q.type==='text') return q.answer.some(a=>user===a||user.toLowerCase()===a.toLowerCase());
+  if(q.type==='checkbox') return JSON.stringify(user)===JSON.stringify([...q.answer].sort());
+  return user===q.answer;
+}
+function grade(){
+  let c=0;
+  questions.forEach(q=>{
+    const u=getUserAnswer(q);const ok=isCorrect(q,u);
+    const box=document.getElementById(`qbox${q.id}`),mark=document.getElementById(`mark${q.id}`),rev=document.getElementById(`review${q.id}`);
+    box.classList.remove('correct','wrong');
+    if(ok){box.classList.add('correct');mark.textContent='✓';mark.style.color='#2e7d32';c++;}
+    else{box.classList.add('wrong');mark.textContent='✗';mark.style.color='#c62828';}
+    rev.classList.add('show');
+  });
+  const s=c*5;
+  document.getElementById('score').textContent=s;
+  document.getElementById('correct-count').textContent=c;
+  let cm='';
+  if(s===100) cm='🏆 満点！攻撃手法を完璧に理解しています。';
+  else if(s>=80) cm='🎉 応用力十分。本試験も自信を持って臨めます。';
+  else if(s>=60) cm='📘 基本は押さえています。誤答を復習しましょう。';
+  else cm='📚 解説資料の「② 脅威とマルウェア」「③ 攻撃手法と対策」を再読してください。';
+  document.getElementById('comment').textContent=cm;
+  document.getElementById('score-panel').classList.add('show');
+  document.getElementById('btn-review').style.display='inline-block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleReview(){document.querySelectorAll('.review').forEach(r=>r.classList.toggle('show'));}
+function reset(){if(!confirm('全ての回答をリセットしますか？')) return;renderQuiz();document.getElementById('score-panel').classList.remove('show');document.getElementById('btn-review').style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
 renderQuiz();
 </script>
 </body>
